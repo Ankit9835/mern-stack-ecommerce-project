@@ -2,12 +2,16 @@ const express = require('express')
 require('dotenv').config()
 const dbConfig = require("./config/dbConfig");
 const app = express()
+const morgan = require("morgan");
+const cors = require("cors");
 const {readdirSync} = require('fs')
 app.use(express.json())
 
-// app.use('/api', (req,res) => {
-//     res.send('test')
-// })
+const authRoutes = require('./routes/auth')
+
+app.use(morgan("dev"));
+app.use(cors());
+//app.use('/api', authRoutes)
 readdirSync('./routes').map((r) => {
     app.use('/api', require(`./routes/${r}`))
 })

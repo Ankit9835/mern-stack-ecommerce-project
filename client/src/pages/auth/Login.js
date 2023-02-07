@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { loginUser } from "../../redux/authSlice";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-
+import axios from 'axios'
 
 
 const Login = () => {
@@ -18,6 +18,14 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const submitUser = async (authToken) => {
+    return await axios.post(`${process.env.REACT_APP_URL}/create-or-update-user`,{},{
+      headers:{
+        authToken
+      }
+    })
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -25,11 +33,12 @@ const Login = () => {
       // console.log(result);
       const { user } = result;
       const idTokenResult = await user.getIdTokenResult();
-
-      dispatch(loginUser({
-        email:user.email,
-        token: idTokenResult.token,
-      }));
+      submitUser(idTokenResult.token).then((res) => console.log("CREATE OR UPDATE RES", res))
+      .catch();
+      // dispatch(loginUser({
+      //   email:user.email,
+      //   token: idTokenResult.token,
+      // }));
       navigate('/')
     } catch (error) {
       console.log(error);
