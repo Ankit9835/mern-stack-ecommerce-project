@@ -2,4 +2,4 @@
 /client/node_modules/
 /server/.env
 /client/src/firebase.js
-/server/config/fbServiceAccountKey.js
+/server/config/fbServiceAccountKey.json
