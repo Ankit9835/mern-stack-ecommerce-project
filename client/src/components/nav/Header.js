@@ -25,6 +25,7 @@ const Header = () => {
  const lodoutUser = async () => {
   firebase.auth().signOut();
   dispatch(loginUser(null))
+  localStorage.removeItem('token')
   navigate('/login')   
  }
   const handleClick = (e) => {

@@ -48,7 +48,7 @@ function App() {
           <Route path='/register' element={<Register />}></Route> 
           <Route path='/register/complete' element={<RegisterComplete />}></Route>
           <Route path='/forgot/password' element={<ForgotPassword />}></Route>
-          <Route path='/user' element={<ProtectedRoute><User /></ProtectedRoute>}></Route>   
+          <Route path='/user/dashboard' element={<ProtectedRoute><User /></ProtectedRoute>}></Route>   
       </Routes>
     </BrowserRouter>
   );
