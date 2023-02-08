@@ -4,12 +4,19 @@ import { useNavigate } from 'react-router-dom';
 import {  toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { auth } from "../../firebase";
+import axios from 'axios'
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../../redux/authSlice';
+import { submitUser } from '../../utils/user';
 
 
 const RegisterComplete = () => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const {user} = useSelector((state) => state.auth)
   const [email,setEmail] = useState('')
   const [password,setPassword] = useState('')
+
 
   useEffect(() => {
     setEmail(localStorage.getItem('emailForRegistration'))
@@ -30,6 +37,16 @@ const RegisterComplete = () => {
             await user.updatePassword(password);
             const idTokenResult = await user.getIdTokenResult();
             // redux store
+            submitUser(idTokenResult.token).then((res) => dispatch(loginUser({
+              email:res.data.email,
+              token: idTokenResult.token,
+              name:res.data.email.split("@")[0],
+              role:res.data.role,
+              _id:res.data._id
+            }))
+            )
+            .catch();
+            localStorage.setItem('token', idTokenResult.token)
             console.log("user", user, "idTokenResult", idTokenResult);
             // redirect
             navigate("/");

@@ -11,18 +11,26 @@ import { auth } from "./firebase";
 import { useEffect } from 'react';
 import {loginUser} from './redux/authSlice'
 import ForgotPassword from './pages/auth/ForgotPassword';
+import { currentUser } from './utils/user';
+import ProtectedRoute from './pages/ProtectedRoute';
+import User from './pages/User';
+
 
 function App() {
   const dispatch = useDispatch()
   const unsubscribe = auth.onAuthStateChanged(async (user) => {
-    if (user) {
+    
       const idTokenResult = await user.getIdTokenResult();
       console.log("user", user);
-      dispatch(loginUser({
-        email:user.email,
+      currentUser(idTokenResult.token).then((res) =>  dispatch(loginUser({
+        email:res.data.user.email,
         token: idTokenResult.token,
-      }))  
-    } 
+        name:res.data.user.email.split("@")[0],
+        role:res.data.user.role,
+        _id:res.data.user._id
+      })) ).catch((error) => console.log(error))
+      
+    
   });
 
   useEffect(() => {
@@ -33,11 +41,14 @@ function App() {
       <Header />
       <ToastContainer />
       <Routes>
-         <Route index element={<Home />}></Route>
+         <Route index element={<ProtectedRoute>
+            <Home />
+         </ProtectedRoute>}></Route>
           <Route path='/login' element={<Login />}></Route>
           <Route path='/register' element={<Register />}></Route> 
           <Route path='/register/complete' element={<RegisterComplete />}></Route>
-          <Route path='/forgot/password' element={<ForgotPassword />}></Route>   
+          <Route path='/forgot/password' element={<ForgotPassword />}></Route>
+          <Route path='/user' element={<ProtectedRoute><User /></ProtectedRoute>}></Route>   
       </Routes>
     </BrowserRouter>
   );

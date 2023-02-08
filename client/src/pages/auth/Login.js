@@ -9,6 +9,7 @@ import { loginUser } from "../../redux/authSlice";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import axios from 'axios'
+import { RoleBasedRedirection, submitUser } from "../../utils/user";
 
 
 const Login = () => {
@@ -18,13 +19,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const submitUser = async (authToken) => {
-    return await axios.post(`${process.env.REACT_APP_URL}/create-or-update-user`,{},{
-      headers:{
-        authToken
-      }
-    })
-  }
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,13 +28,34 @@ const Login = () => {
       // console.log(result);
       const { user } = result;
       const idTokenResult = await user.getIdTokenResult();
-      submitUser(idTokenResult.token).then((res) => console.log("CREATE OR UPDATE RES", res))
-      .catch();
-      // dispatch(loginUser({
-      //   email:user.email,
-      //   token: idTokenResult.token,
-      // }));
-      navigate('/')
+     
+
+      
+      try {
+        const res = await submitUser(idTokenResult.token)
+        if(res){
+          console.log(res)
+          dispatch(loginUser({
+           email:res.data.email,
+           token: idTokenResult.token,
+           name:res.data.email.split("@")[0],
+           role:res.data.role,
+           _id:res.data._id
+          }))
+          localStorage.setItem('token', idTokenResult.token)
+         //await RoleBasedRedirection(res)
+         if(res.data.role === 'admin'){
+          navigate('/admin/dashboard')
+         } else {
+          navigate('/user')
+         }
+         }
+      } catch (error) {
+        console.log(error)
+      }
+      
+      
+      // navigate('/')
     } catch (error) {
       console.log(error);
       toast.error(error.message);
@@ -53,10 +69,17 @@ const Login = () => {
       .then(async (result) => {
         const { user } = result;
         const idTokenResult = await user.getIdTokenResult();
-        dispatch(loginUser({
-          email:user.email,
+        submitUser(idTokenResult.token).then((res) => dispatch(loginUser({
+          email:res.data.email,
           token: idTokenResult.token,
-        }));
+          name:res.data.email.split("@")[0],
+          role:res.data.role,
+          _id:res.data._id
+        }))
+        
+        )
+        .catch();
+        localStorage.setItem('token', idTokenResult.token)
         navigate('/')
       })
       .catch((err) => {
