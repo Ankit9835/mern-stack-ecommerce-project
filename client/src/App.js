@@ -14,6 +14,8 @@ import ForgotPassword from './pages/auth/ForgotPassword';
 import { currentUser } from './utils/user';
 import ProtectedRoute from './pages/ProtectedRoute';
 import User from './pages/User';
+import Password from './pages/auth/Password';
+import Wishlist from './pages/auth/Wishlist';
 
 
 function App() {
@@ -48,7 +50,9 @@ function App() {
           <Route path='/register' element={<Register />}></Route> 
           <Route path='/register/complete' element={<RegisterComplete />}></Route>
           <Route path='/forgot/password' element={<ForgotPassword />}></Route>
-          <Route path='/user/dashboard' element={<ProtectedRoute><User /></ProtectedRoute>}></Route>   
+          <Route path='/user/dashboard' element={<ProtectedRoute><User /></ProtectedRoute>}></Route>
+          <Route path='/user/password' element={<ProtectedRoute><Password /></ProtectedRoute>}></Route> 
+          <Route path='/user/wishlist' element={<ProtectedRoute><Wishlist /></ProtectedRoute>}></Route>      
       </Routes>
     </BrowserRouter>
   );
