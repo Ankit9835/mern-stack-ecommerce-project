@@ -10,6 +10,9 @@ const create = async (req,res) => {
         return res.json(category)
     } catch (error) {
         console.log(error)
+        return res.json({
+            err:error.code
+        })
     }
 }
 

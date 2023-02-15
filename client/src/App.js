@@ -16,6 +16,10 @@ import ProtectedRoute from './pages/ProtectedRoute';
 import User from './pages/User';
 import Password from './pages/auth/Password';
 import Wishlist from './pages/auth/Wishlist';
+import Admin from './pages/AdminRoutes/Admin';
+import CategoryCreate from './pages/AdminRoutes/category/CategoryCreate';
+import UpdateCategory from './pages/AdminRoutes/category/UpdateCategory';
+
 
 
 function App() {
@@ -52,7 +56,10 @@ function App() {
           <Route path='/forgot/password' element={<ForgotPassword />}></Route>
           <Route path='/user/dashboard' element={<ProtectedRoute><User /></ProtectedRoute>}></Route>
           <Route path='/user/password' element={<ProtectedRoute><Password /></ProtectedRoute>}></Route> 
-          <Route path='/user/wishlist' element={<ProtectedRoute><Wishlist /></ProtectedRoute>}></Route>      
+          <Route path='/user/wishlist' element={<ProtectedRoute><Wishlist /></ProtectedRoute>}></Route>
+          <Route path='/admin/dashboard' element={<ProtectedRoute><Admin /></ProtectedRoute>}></Route> 
+          <Route path='/admin/category' element={<ProtectedRoute><CategoryCreate /></ProtectedRoute>}></Route>
+          <Route path='/admin/category/:slug' element={<ProtectedRoute><UpdateCategory /></ProtectedRoute>}></Route>        
       </Routes>
     </BrowserRouter>
   );
