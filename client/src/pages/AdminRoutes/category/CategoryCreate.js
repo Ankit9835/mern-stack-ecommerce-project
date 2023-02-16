@@ -8,6 +8,7 @@ import axios from 'axios'
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Link } from 'react-router-dom'
 import { async } from '@firebase/util'
+import SearchFilter from '../../../components/SearchFilter'
 
 
 
@@ -15,6 +16,7 @@ const CategoryCreate = () => {
   const [name,setName] = useState('')
   const [loading,setLoading] = useState(false)
   const [category,setCategory] = useState([])
+  const [keyword,setKeyword] = useState('')
   const {user} = useSelector((state) => state.auth)
 
   const handleSubmit = async(e) => {
@@ -74,6 +76,13 @@ const CategoryCreate = () => {
     }
   }
 
+  const handleChange = (e) => {
+    e.preventDefault()
+    setKeyword(e.target.value)
+  }
+  
+  const searched = (keyword) => (c) => c.name.toLowerCase().includes(keyword)
+
   useEffect(() => {
     getAllCategory()
   },[])
@@ -91,7 +100,9 @@ const CategoryCreate = () => {
         )}
         <CategoryForm handleSubmit={handleSubmit} name={name} setName={setName}/>
         <hr />
-        {category.map((c) => (
+       <SearchFilter keyword={keyword} handleChange={handleChange} />
+      <br />
+        {category.filter(searched(keyword)).map((c) => (
             <div className="alert alert-secondary" key={c._id}>
               {c.name}
               <span
