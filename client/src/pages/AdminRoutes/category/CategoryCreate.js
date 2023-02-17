@@ -100,7 +100,7 @@ const CategoryCreate = () => {
         )}
         <CategoryForm handleSubmit={handleSubmit} name={name} setName={setName}/>
         <hr />
-       <SearchFilter keyword={keyword} handleChange={handleChange} />
+       <SearchFilter keyword={keyword} handleChange={handleChange} setKeyword={setKeyword} />
       <br />
         {category.filter(searched(keyword)).map((c) => (
             <div className="alert alert-secondary" key={c._id}>
