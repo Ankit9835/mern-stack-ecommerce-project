@@ -21,6 +21,7 @@ import CategoryCreate from './pages/AdminRoutes/category/CategoryCreate';
 import UpdateCategory from './pages/AdminRoutes/category/UpdateCategory';
 import SubCreate from './pages/AdminRoutes/subcategory/SubCreate';
 import UpdateSubCreate from './pages/AdminRoutes/subcategory/UpdateSubCreate';
+import ProductCreate from './pages/AdminRoutes/product/ProductCreate';
 
 
 
@@ -63,7 +64,8 @@ function App() {
           <Route path='/admin/category' element={<ProtectedRoute><CategoryCreate /></ProtectedRoute>}></Route>
           <Route path='/admin/category/:slug' element={<ProtectedRoute><UpdateCategory /></ProtectedRoute>}></Route>
           <Route path='/admin/sub' element={<ProtectedRoute><SubCreate /></ProtectedRoute>}></Route>
-          <Route path='/admin/sub/:slug' element={<ProtectedRoute><UpdateSubCreate /></ProtectedRoute>}></Route>         
+          <Route path='/admin/sub/:slug' element={<ProtectedRoute><UpdateSubCreate /></ProtectedRoute>}></Route>
+          <Route path='/admin/products' element={<ProtectedRoute><ProductCreate /></ProtectedRoute>}></Route>          
       </Routes>
     </BrowserRouter>
   );

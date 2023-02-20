@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export const getAllCategory = async () => {
-    return await axios.get(`${process.env.REACT_APP_API}/categories`)
+    return await axios.get(`${process.env.REACT_APP_URL}/categories`)
 }
 
 export const getSingleCategory = async (slug) => {

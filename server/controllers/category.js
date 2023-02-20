@@ -1,4 +1,5 @@
 const Category = require('../models/category')
+const Sub = require('../models/sub')
 const slug = require('slugify')
 const create = async (req,res) => {
     try {
@@ -80,4 +81,18 @@ const remove = async (req,res) => {
     }
 }
 
-module.exports = {create,list,read,update,remove}
+const subCategory = async (req,res) => {
+    try {
+        const subcategory = await Sub.find({parent:req.params._id})
+        return res.status(200).json({
+            subcategory
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(400).json({
+            err:error.message
+        })
+    }
+}
+
+module.exports = {create,list,read,update,remove,subCategory}
