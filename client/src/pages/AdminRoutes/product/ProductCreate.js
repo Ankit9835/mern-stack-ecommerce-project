@@ -31,6 +31,7 @@ const ProductCreate = () => {
   };
 
   const [values, setValues] = useState(initialState);
+  const [loading, setLoading] = useState(false);
   const [subOptions, setSubOptions] = useState([]);
   const [isSub, setIsSub] = useState(false);
 
@@ -88,9 +89,9 @@ const ProductCreate = () => {
         <div className="col-md-10">
           <h4>Product create</h4>
           <hr />
-          {JSON.stringify(values.images,4,null)}
+          {/* {JSON.stringify(values.images,4,null)} */}
           <div className="p-3">
-            <FileUpload values={values} setValues={setValues}/>
+            <FileUpload values={values} setValues={setValues} loading={loading} setLoading={setLoading}/>
           </div>
 
           <ProductForm
