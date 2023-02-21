@@ -7,6 +7,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ProductForm from "../../../components/ProductForm";
 import { getAllCategory } from "../../../utils/category";
+import FileUpload from "../../../components/FileUpload";
+
 
 const ProductCreate = () => {
   const { user } = useSelector((state) => state.auth);
@@ -38,7 +40,8 @@ const ProductCreate = () => {
 
   const categoryChange = async (e) => {
     // e.preventDefault()
-    setValues({ ...values, category: e.target.value });
+    setValues({ ...values, subs:[], category: e.target.value });
+    setIsSub(true)
     console.log("category id changed", e.target.value);
     const res = await getSubCategories(e.target.value);
     console.log("sub-category changed", res);
@@ -85,6 +88,10 @@ const ProductCreate = () => {
         <div className="col-md-10">
           <h4>Product create</h4>
           <hr />
+          {JSON.stringify(values.images,4,null)}
+          <div className="p-3">
+            <FileUpload values={values} setValues={setValues}/>
+          </div>
 
           <ProductForm
             handleSubmit={handleSubmit}
@@ -95,6 +102,7 @@ const ProductCreate = () => {
             setSubOptions={setSubOptions}
             isSub={isSub}
             setIsSub={setIsSub}
+            setValues={setValues}
           />
         </div>
       </div>

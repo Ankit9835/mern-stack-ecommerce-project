@@ -1,4 +1,7 @@
 import React from 'react'
+import { Select } from "antd";
+
+const { Option } = Select;
 
 const ProductForm = ({
     handleChange,
@@ -8,7 +11,8 @@ const ProductForm = ({
     subOptions,
     setSubOptions,
     isSub,
-    setIsSub
+    setIsSub,
+    setValues
 }) => {
 
     const {
@@ -30,7 +34,7 @@ const ProductForm = ({
 
   return (
     <>
-     {JSON.stringify(categories,4,null)}
+     
       <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Title</label>
@@ -136,8 +140,31 @@ const ProductForm = ({
               ))}
             </select>
           </div>
+         
+       {isSub && 
+        <div>
+        <label>Sub Categories</label>
+        <Select
+          mode="multiple"
+          style={{ width: "100%" }}
+          placeholder="Please select"
+          value={subs}
+          onChange={(value) => setValues({ ...values, subs: value })}
+        >
+         
+         {subOptions.map((s) => {
+         return <Option key={s._id} value={s._id}>
+                {s.name}
+              </Option>
+         })}
 
-          {subOptions.length}
+
+          
+         
+        </Select>
+        </div> 
+       } 
+       <br />
 
           <button className="btn btn-outline-info">Save</button>
         </form>
