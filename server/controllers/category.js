@@ -84,6 +84,8 @@ const remove = async (req,res) => {
 const subCategory = async (req,res) => {
     try {
         const subcategory = await Sub.find({parent:req.params._id})
+        console.log('sub',subcategory)
+        console.log('params',req.params._id)
         return res.status(200).json({
             subcategory
         })

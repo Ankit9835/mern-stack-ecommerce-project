@@ -23,12 +23,8 @@ export const removedProduct = async (slug,token) => {
     })
 }
 
-export const getSingleProduct = async (slug,token) => {
-    return await axios.get(`${process.env.REACT_APP_URL}/product/${slug}`,{
-        headers:{
-            authtoken: token
-        }
-    })
+export const getSingleProduct = async (slug) => {
+    return await axios.get(`${process.env.REACT_APP_URL}/product/${slug}`)
 }
 
 

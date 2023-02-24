@@ -9,6 +9,7 @@ import ProductForm from "../../../components/ProductForm";
 import { getAllCategory } from "../../../utils/category";
 import FileUpload from "../../../components/FileUpload";
 import { async } from "@firebase/util";
+import ProductUpdateForm from "../../../components/ProductUpdateForm";
 
 
 
@@ -35,22 +36,37 @@ const EditProduct = () => {
   };
 
   const [values, setValues] = useState(initialState);
+  const [subClass, setSubClass] = useState('');
   const [loading, setLoading] = useState(false);
   const [subOptions, setSubOptions] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [arrayOfSubs, setArrayofSubs] = useState([]);
   const [isSub, setIsSub] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
   const categoryChange = async (e) => {
-    // e.preventDefault()
-    setValues({ ...values, subs:[], category: e.target.value });
-    setIsSub(true)
+     e.preventDefault()
+    setValues({ ...values, subs:[] });
+    //setIsSub(true)
+    setSelectedCategory(e.target.value)
     console.log("category id changed", e.target.value);
     const res = await getSubCategories(e.target.value);
     console.log("sub-category changed", res);
     setSubOptions(res.data.subcategory);
+    // if user clicks back to the original category
+    // show its sub categories in default
+    console.log('values',values.category._id)
+    console.log('current',e.target.value)
+    console.log("EXISTING CATEGORY values.category", values.category);
+    if (values.category._id === e.target.value) {
+      singleCategory(routeValue);
+    }
+    // clear old sub category ids
+    setArrayofSubs([]);
   };
 
   const handleSubmit = async (e) => {
@@ -69,11 +85,13 @@ const EditProduct = () => {
     }
   };
 
+  
+
   const loadCategories = async () => {
     try {
       const categories = await getAllCategory();
-      console.log("categories", categories);
-      setValues({ ...values, categories: categories.data.categories });
+      console.log("categoriess", categories);
+      setCategories(categories.data.categories)
     } catch (error) {
       console.log(error);
     }
@@ -81,9 +99,18 @@ const EditProduct = () => {
 
   const singleCategory = async (slug) => {
     try {
-        const category = await getSingleProduct(slug,user.token)
+        const category = await getSingleProduct(slug)
         console.log('get single category', category)
         setValues({...values, ...category.data.data})
+        const getAllSubCategories = await getSubCategories(category.data.data.category._id)
+        setSubOptions(getAllSubCategories.data.subcategory)
+        console.log('get all sub',getAllSubCategories)
+        let arr1 = []
+        category.data.data.subs.map((s) => {
+         return arr1.push(s._id)
+        })
+        console.log('array',arr1)
+        setArrayofSubs((prev) => arr1)
     } catch (error) {
         console.log(error.message)
     }
@@ -105,7 +132,21 @@ const EditProduct = () => {
 
         <div className="col-md-10">
           <h4>Product update</h4>
-          {JSON.stringify(values,4,null)}
+           {JSON.stringify(values.category._id,4,null)} 
+          <ProductUpdateForm
+            handleSubmit={handleSubmit}
+            handleChange={handleChange}
+            setValues={setValues}
+            values={values}
+            categoryChange={categoryChange}
+            subOptions={subOptions}
+            arrayOfSubs={arrayOfSubs}
+            setArrayofSubs={setArrayofSubs}
+            loadCategories={loadCategories}
+            categories={categories}
+            setCategories={setCategories}
+            selectedCategory={selectedCategory}
+          />
         </div>
       </div>
     </div>
