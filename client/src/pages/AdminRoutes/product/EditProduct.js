@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import AdminNav from "../../../components/nav/AdminNav";
-import { createProduct, getSingleProduct, getSubCategories } from "../../../utils/product";
+import { createProduct, getSingleProduct, getSubCategories, updateProduct } from "../../../utils/product";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import ProductForm from "../../../components/ProductForm";
@@ -72,16 +72,17 @@ const EditProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await createProduct(values, user.token);
-      console.log(res);
+      values.subs = arrayOfSubs
+      values.category = selectedCategory ? selectedCategory : values.category
+      const res = await updateProduct(routeValue,values,user.token)
+      console.log('update prodduct',res);
       if (res) {
-        toast.success(`${res.data.product.title} is created`);
-        setTimeout(() => {
-          setValues(initialState);
-        }, 1000);
+        toast.success(`${res.data.title} is created`);
+       navigate('/admin/product')
       }
     } catch (error) {
       console.log(error);
+      toast.error(error.message)
     }
   };
 
@@ -132,7 +133,11 @@ const EditProduct = () => {
 
         <div className="col-md-10">
           <h4>Product update</h4>
-           {JSON.stringify(values.category._id,4,null)} 
+          <hr />
+           {/* {JSON.stringify(values.category._id,4,null)}  */}
+           <div className="p-3">
+            <FileUpload values={values} setValues={setValues} loading={loading} setLoading={setLoading}/>
+          </div>
           <ProductUpdateForm
             handleSubmit={handleSubmit}
             handleChange={handleChange}

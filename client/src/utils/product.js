@@ -27,4 +27,12 @@ export const getSingleProduct = async (slug) => {
     return await axios.get(`${process.env.REACT_APP_URL}/product/${slug}`)
 }
 
+export const updateProduct = async (slug,values,token) =>{
+    return await axios.put(`${process.env.REACT_APP_URL}/updated-product/${slug}`, values, {
+        headers:{
+            authtoken:token
+        }
+    })
+}
+
 

@@ -1,5 +1,6 @@
 const Product = require("../models/product");
 const slug = require("slugify");
+const mongoose = require('mongoose')
 
 const create = async (req, res) => {
   try {
@@ -72,6 +73,7 @@ const removedProduct = async (req,res) => {
  const read =async (req,res) => {
   try {
     const product = await Product.findOne({slug:req.params.slug}).populate('category').populate('subs')
+    
     if(product){
       return res.status(200).json({
         message:'product fetched',
@@ -94,9 +96,31 @@ const removedProduct = async (req,res) => {
   }
 }
 
+ const updateProduct = async (req,res) => {
+  console.log('slug',req.params.slug)
+  console.log('request',req.body)
+  try {
+    if (req.body.title) {
+      req.body.slug = slug(req.body.title);
+    }
+    console.log('slug2',req.body.slug)
+    const updated = await Product.findOneAndUpdate({slug:req.params.slug}, req.body, {new:true})
+    if(!updated){
+      return res.status(404).json({ msg: `No task with id :${req.params.slug}` });
+    }
+    res.json(updated);
+  } catch (error) {
+     return res.status(400).json({
+      success:false,
+      message:error.message
+     })
+  }
+}
+
 module.exports = {
   create,
   listAllProducts,
   removedProduct,
-  read
+  read,
+  updateProduct
 };
