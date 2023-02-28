@@ -117,10 +117,33 @@ const removedProduct = async (req,res) => {
   }
 }
 
+const list =  async (req,res) => {
+  try {
+    const {sort,order,limit} = req.body
+    console.log(sort,order)
+    const product = await Product.find({}).populate('category')
+                    .populate('subs')
+                    .sort([[sort, order]])
+                    .limit(limit)
+                    console.log('best sellers',product)
+    return res.status(200).json({
+      success:true,
+      message:'new arrival fetched',
+      product
+    })
+  } catch (error) {
+    return res.status(400).json({
+      success:false,
+      message:error.message,
+    })
+  }
+}
+
 module.exports = {
   create,
   listAllProducts,
   removedProduct,
   read,
-  updateProduct
+  updateProduct,
+  list
 };
