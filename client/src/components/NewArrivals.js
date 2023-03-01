@@ -3,11 +3,17 @@ import React, { useEffect, useState } from 'react'
 import AllProducts from '../components/AllProducts'
 import CardLoading from '../components/CardLoading'
 import Jumbotron from '../components/Jumbotron'
-import { getAllProducts, newProducts } from '../utils/product'
+import { getAllProducts, getProductCounts, newProducts } from '../utils/product'
+import {Pagination} from "antd"
 
 const NewArrivals = () => {
+  
     const [products,setProducts] = useState([])
     const [loading,setLoading] = useState(false)
+    const [page,setPage] = useState(1)
+    const [productsCount,setProductsCount] = useState(0)
+
+
     const freshArrivals = async () => {
         try {
           const response = await newProducts('createdAt','desc',3)

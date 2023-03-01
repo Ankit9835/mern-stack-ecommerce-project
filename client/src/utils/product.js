@@ -15,6 +15,9 @@ export const getAllProducts = async (count) => {
    return await axios.get(`${process.env.REACT_APP_URL}/products/${count}`)
 }
 
+export const getProductCounts = async () => 
+  await axios.get(`${process.env.REACT_APP_URL}/products/count`)
+
 export const removedProduct = async (slug,token) => {
     return await axios.delete(`${process.env.REACT_APP_URL}/remove-product/${slug}`,{
         headers:{

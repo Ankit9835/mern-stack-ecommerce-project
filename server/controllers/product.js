@@ -43,7 +43,7 @@ const listAllProducts = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(400).json({
-      err: err.message,
+      err: error.message,
     });
   }
 };
@@ -117,14 +117,40 @@ const removedProduct = async (req,res) => {
   }
 }
 
+// const list =  async (req,res) => {
+//   try {
+//     const {sort,order,limit} = req.body
+//     console.log(sort,order)
+//     const product = await Product.find({}).populate('category')
+//                     .populate('subs')
+//                     .sort([[sort, order]])
+//                     .limit(limit)
+//                     console.log('best sellers',product)
+//     return res.status(200).json({
+//       success:true,
+//       message:'new arrival fetched',
+//       product
+//     })
+//   } catch (error) {
+//     return res.status(400).json({
+//       success:false,
+//       message:error.message,
+//     })
+//   }
+// }
+
 const list =  async (req,res) => {
   try {
-    const {sort,order,limit} = req.body
-    console.log(sort,order)
-    const product = await Product.find({}).populate('category')
+    const {sort,order,page} = req.body
+    const currentPage = page || 1
+    const perPage = 3
+    console.log(sort,order,page)
+    const product = await Product.find({})
+                    .skip((currentPage - 1) * page)
+                    .populate('category')
                     .populate('subs')
                     .sort([[sort, order]])
-                    .limit(limit)
+                    .limit(perPage)
                     console.log('best sellers',product)
     return res.status(200).json({
       success:true,
@@ -139,11 +165,17 @@ const list =  async (req,res) => {
   }
 }
 
+ const productCount = async (req,res) => {
+  let total = await Product.find({}).estimatedDocumentCount()
+  res.json(total);
+}
+
 module.exports = {
   create,
   listAllProducts,
   removedProduct,
   read,
   updateProduct,
-  list
+  list,
+  productCount
 };
