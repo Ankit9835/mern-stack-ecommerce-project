@@ -73,7 +73,7 @@ const removedProduct = async (req,res) => {
  const read =async (req,res) => {
   try {
     const product = await Product.findOne({slug:req.params.slug}).populate('category').populate('subs')
-    
+    console.log('read product',req.params.slug)
     if(product){
       return res.status(200).json({
         message:'product fetched',
@@ -141,12 +141,13 @@ const removedProduct = async (req,res) => {
 
 const list =  async (req,res) => {
   try {
+    console.log('request body',req.body)
     const {sort,order,page} = req.body
     const currentPage = page || 1
     const perPage = 3
     console.log(sort,order,page)
     const product = await Product.find({})
-                    .skip((currentPage - 1) * page)
+                    .skip((currentPage - 1) * perPage)
                     .populate('category')
                     .populate('subs')
                     .sort([[sort, order]])
