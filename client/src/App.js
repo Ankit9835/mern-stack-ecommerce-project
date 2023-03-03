@@ -71,7 +71,7 @@ function App() {
           <Route path='/admin/products' element={<ProtectedRoute><ProductCreate /></ProtectedRoute>}></Route>
           <Route path='/admin/product' element={<ProtectedRoute><AllProducts /></ProtectedRoute>}></Route> 
           <Route path='/admin/product/:slug' element={<ProtectedRoute><EditProduct /></ProtectedRoute>}></Route>
-          <Route path='/product/:slug' element={<ProtectedRoute><ViewProduct /></ProtectedRoute>}></Route>           
+          <Route path='/product/:slug' element={<ViewProduct />}></Route>           
       </Routes>
     </BrowserRouter>
   );

@@ -1,11 +1,15 @@
 import React from "react";
-import { Card } from "antd";
+import { Card, Tabs } from "antd";
 import { Link } from "react-router-dom";
 import { HeartOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 import Laptop from "../images/laptop.png";
 import ProductListItem from "./ProductListItem";
+import StarsRating from 'stars-rating'
+import RatingModal from "./modal/RatingModal";
+
+const { TabPane } = Tabs;
 
 const { Meta } = Card;
 
@@ -22,6 +26,7 @@ const SingleProduct = ({
   brand,
   quantity,
   sold,
+  _id
 }) => {
   return (
     <>
@@ -33,6 +38,16 @@ const SingleProduct = ({
         ) : (
           <Card cover={<img src={Laptop} className="mb-3" />}></Card>
         )}
+
+        <Tabs type="card">
+          <TabPane tab="Description" key="1">
+            {description && description}
+          </TabPane>
+          <TabPane tab="More" key="2">
+            Call use on xxxx xxx xxx to learn more about this product.
+          </TabPane>
+        </Tabs>
+
       </div>
 
       <div className="col-md-5">
@@ -45,9 +60,22 @@ const SingleProduct = ({
             <Link to="/">
               <HeartOutlined className="text-info" /> <br /> Add to Wishlist
             </Link>,
+            <RatingModal>
+                <StarsRating
+             name={_id}
+             numberOfStars={5}
+             rating={2}
+             changeRating={(newRating, name) =>
+               console.log("newRating", newRating, "name", name)
+             }
+             isSelectable={true}
+             starRatedColor="red"
+           />
+            </RatingModal>
           ]}
         >
           <Meta title={title} description={description} />
+         
           <ProductListItem
             title={title}
             description={description}

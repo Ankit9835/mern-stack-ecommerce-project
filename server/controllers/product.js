@@ -1,6 +1,7 @@
 const Product = require("../models/product");
 const slug = require("slugify");
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const user = require("../models/user");
 
 const create = async (req, res) => {
   try {
@@ -171,6 +172,34 @@ const list =  async (req,res) => {
   res.json(total);
 }
 
+const productStar = async (req,res) => {
+  try {
+    const {star} = req.body
+    const products = await Product.findById(req.params.productId)
+    const currentUser = await user.findOne({email:req.user.email})
+    let existedRatingObject = await products.ratings.find((pro)=>{
+      pro.postedBy.toString() === currentUser._id.toString()
+    })
+    console.log('existing rating',existedRatingObject)
+    if(existedRatingObject === undefined){
+      let ratingAdded = await Product.findByIdAndUpdate(products._id,{
+        $push: {ratings: {star, postedBy:currentUser._id}}
+      }, {new: true})
+      res.json(ratingAdded)
+    } else {
+      const ratingUpdated = await Product.updateOne({
+        ratings: {$elemMatch: existedRatingObject}
+      }, {$set: {"$.ratings.$.start" : star}},{new:true})
+      res.json(ratingUpdated)
+    } 
+  } catch (error) {
+    return res.status(400).json({
+      message:error.message,
+      status:false,
+    })
+  }
+}
+
 module.exports = {
   create,
   listAllProducts,
@@ -178,5 +207,6 @@ module.exports = {
   read,
   updateProduct,
   list,
-  productCount
+  productCount,
+  productStar
 };
