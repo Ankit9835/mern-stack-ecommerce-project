@@ -53,9 +53,9 @@ function App() {
       <Header />
       <ToastContainer />
       <Routes>
-         <Route index element={<ProtectedRoute>
+         <Route index element={
             <Home />
-         </ProtectedRoute>}></Route>
+         }></Route>
           <Route path='/login' element={<Login />}></Route>
           <Route path='/register' element={<Register />}></Route> 
           <Route path='/register/complete' element={<RegisterComplete />}></Route>

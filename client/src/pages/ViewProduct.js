@@ -6,6 +6,7 @@ import { getSingleProduct } from '../utils/product'
 const ViewProduct = () => {
 
 const [singleProduct,setSingleProduct] = useState({})
+const [star,setStar] = useState(0)
 const routeParams = useParams().slug
 
 const product = async () => {
@@ -19,6 +20,11 @@ const product = async () => {
     }
 }
 
+const onStarClick = (newRating,name) => {
+  console.log(newRating,name)
+  setStar(newRating)
+}
+
 useEffect(() => {
     product()
 },[])
@@ -26,7 +32,7 @@ useEffect(() => {
   return (
     <div className="container-fluid">
     <div className="row pt-4">
-      <SingleProduct key={singleProduct._id} {...singleProduct} />
+      <SingleProduct key={singleProduct._id} {...singleProduct} onStarClick={onStarClick} starRating={star} setStar={setStar} />
     </div>
 
     <div className="row">
