@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import SingleProduct from '../components/SingleProduct'
-import { getSingleProduct } from '../utils/product'
+import { getSingleProduct, updateProductRating } from '../utils/product'
+import { showAverage } from '../utils/raings'
+
 
 const ViewProduct = () => {
 
 const [singleProduct,setSingleProduct] = useState({})
 const [star,setStar] = useState(0)
 const routeParams = useParams().slug
-
+const {user} = useSelector((state) => state.auth)
+console.log('users redux',user)
 const product = async () => {
     try {
         console.log('route params',routeParams)
@@ -20,19 +24,35 @@ const product = async () => {
     }
 }
 
-const onStarClick = (newRating,name) => {
+const onStarClick = async (newRating,name) => {
   console.log(newRating,name)
   setStar(newRating)
+  //console.log('star',star)
+  const updateStar = await updateProductRating(name,newRating,user.token)
+  console.log(updateStar)
 }
 
 useEffect(() => {
     product()
-},[])
+},[routeParams])
+
+useEffect(() => {
+  console.log('single',singleProduct)
+  console.log('user ids',user.email)
+  if(singleProduct.ratings && user){
+    let existingProduct = singleProduct.ratings.find(((pro) => pro.postedBy.toString() === user._id))
+    console.log('exists',existingProduct)
+    existingProduct && setStar(existingProduct.star)
+  }
+},[singleProduct])
+
+
 
   return (
     <div className="container-fluid">
     <div className="row pt-4">
-      <SingleProduct key={singleProduct._id} {...singleProduct} onStarClick={onStarClick} starRating={star} setStar={setStar} />
+    
+      <SingleProduct key={singleProduct._id} {...singleProduct} singleProduct={singleProduct} onStarClick={onStarClick} starRating={star} setStar={setStar} />
     </div>
 
     <div className="row">

@@ -42,4 +42,12 @@ export const newProducts = async (sort,order,page) => {
     return await axios.post(`${process.env.REACT_APP_URL}/products`, {sort,order,page})
 }
 
+export const updateProductRating = async (productId,star,token) => {
+    return await axios.put(`${process.env.REACT_APP_URL}/products/star/${productId}`, {star}, {
+        headers:{
+            authtoken:token
+        }
+    })
+}
+
 

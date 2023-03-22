@@ -175,21 +175,31 @@ const list =  async (req,res) => {
 const productStar = async (req,res) => {
   try {
     const {star} = req.body
+    console.log('star',star)
     const products = await Product.findById(req.params.productId)
     const currentUser = await user.findOne({email:req.user.email})
-    let existedRatingObject = await products.ratings.find((pro)=>{
-      pro.postedBy.toString() === currentUser._id.toString()
-    })
+    let existedRatingObject = products.ratings.find(
+    (ele) => ele.postedBy.toString() === currentUser._id.toString()
+  );
     console.log('existing rating',existedRatingObject)
     if(existedRatingObject === undefined){
-      let ratingAdded = await Product.findByIdAndUpdate(products._id,{
-        $push: {ratings: {star, postedBy:currentUser._id}}
-      }, {new: true})
+     
+      let ratingAdded = await Product.findByIdAndUpdate(
+        products._id,
+        {
+          $push: { ratings: { star, postedBy: currentUser._id } },
+        },
+        { new: true }
+      )
       res.json(ratingAdded)
     } else {
-      const ratingUpdated = await Product.updateOne({
-        ratings: {$elemMatch: existedRatingObject}
-      }, {$set: {"$.ratings.$.start" : star}},{new:true})
+      const ratingUpdated = await Product.updateOne(
+        {
+          ratings: { $elemMatch: existedRatingObject },
+        },
+        { $set: { "ratings.$.star": star } },
+        { new: true }
+      );
       res.json(ratingUpdated)
     } 
   } catch (error) {
