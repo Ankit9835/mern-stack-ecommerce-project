@@ -6,6 +6,8 @@ import Jumbotron from '../components/Jumbotron'
 import { getAllProducts, getProductCounts, newProducts } from '../utils/product'
 import { Pagination } from 'antd';
 import axios from 'axios'
+import { showAverage } from '../utils/raings'
+
 
 const NewArrivals = () => {
 
@@ -48,7 +50,8 @@ const NewArrivals = () => {
         <div className="row">
           {products.map((product) => (
             <div key={product._id} className="col-md-4">
-              <AllProducts key={product._id} {...product} />
+              
+              <AllProducts key={product._id} {...product} product={product} />
             </div>
           ))}
         </div>
