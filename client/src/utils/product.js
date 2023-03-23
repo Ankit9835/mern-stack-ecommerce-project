@@ -50,4 +50,8 @@ export const updateProductRating = async (productId,star,token) => {
     })
 }
 
+export const relatedProduct = async (productId) => {
+    return await axios.get(`${process.env.REACT_APP_URL}//product/related/${productId}`)
+}
+
 

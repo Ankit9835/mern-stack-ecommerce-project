@@ -210,6 +210,18 @@ const productStar = async (req,res) => {
   }
 }
 
+const relatedProduct = async (req,res) => {
+  try {
+    const product = await Product.findById(req.params.productId)
+    const related = await Product.find({_id:{$ne: product._id},category:product.category})
+    .limit(3).populate('category')
+    .populate('subs')
+    res.json(related)
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
 module.exports = {
   create,
   listAllProducts,
@@ -218,5 +230,6 @@ module.exports = {
   updateProduct,
   list,
   productCount,
-  productStar
+  productStar,
+  relatedProduct
 };
