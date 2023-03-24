@@ -1,4 +1,5 @@
 const Category = require('../models/category')
+const Product  = require('../models/product')
 const Sub = require('../models/sub')
 const slug = require('slugify')
 const create = async (req,res) => {
@@ -34,10 +35,14 @@ const list = async (req,res) => {
 const read = async (req,res) => {
     try {
         const categories = await Category.findOne({slug: req.params.slug})
+        console.log('category',categories)
         if(categories){
+            const product = await Product.find({category:categories}).populate('category')
+            console.log('product',product)
             return res.status(200).json({
                 message:'category fetched',
-                categories
+                categories,
+                product
             })
         } else {
             return res.status(200).json({

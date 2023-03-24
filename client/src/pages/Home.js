@@ -6,7 +6,9 @@ import CardLoading from '../components/CardLoading'
 import CategoryList from '../components/category/CategoryList'
 import Jumbotron from '../components/Jumbotron'
 import NewArrivals from '../components/NewArrivals'
+import SubCategoryList from '../components/sub/SubCategoryList'
 import { getAllProducts, newProducts } from '../utils/product'
+
 
 
 
@@ -35,6 +37,11 @@ const Home = () => {
         Categories
       </h4>
       <CategoryList />
+
+      <h4 className="text-center p-3 mt-5 mb-5 display-4 jumbotron">
+        Sub Categories
+      </h4>
+      <SubCategoryList />
 
       <br />
       <br />

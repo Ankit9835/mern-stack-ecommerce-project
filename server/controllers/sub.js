@@ -1,5 +1,6 @@
 const Sub = require("../models/sub");
 const slugify = require("slugify");
+const Product = require('../models/product')
 
 exports.create = async (req, res) => {
   try {
@@ -11,12 +12,27 @@ exports.create = async (req, res) => {
   }
 };
 
-exports.list = async (req, res) =>
-  res.json(await Sub.find({}).sort({ createdAt: -1 }).exec());
+exports.list = async (req, res) => {
+  try {
+    const sub = await Sub.find({}).sort({createdAt: -1})
+    const product = await Product.find({subs:sub})
+    res.json({
+      sub,
+      product
+    }) 
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+  
 
 exports.read = async (req, res) => {
   let sub = await Sub.findOne({ slug: req.params.slug }).exec();
-  res.json(sub);
+  let product = await Product.find({subs:sub})
+  res.json({
+    sub,
+    product
+  });
 };
 
 exports.update = async (req, res) => {

@@ -25,6 +25,8 @@ import ProductCreate from './pages/AdminRoutes/product/ProductCreate';
 import AllProducts from './pages/AdminRoutes/product/AllProducts';
 import EditProduct from './pages/AdminRoutes/product/EditProduct';
 import ViewProduct from './pages/ViewProduct';
+import CategoryBasedOnId from './pages/category/CategoryBasedOnId';
+import SubCategoryBasedOnId from './pages/subcategory/SubCategoryBasedOnId';
 
 
 
@@ -71,7 +73,9 @@ function App() {
           <Route path='/admin/products' element={<ProtectedRoute><ProductCreate /></ProtectedRoute>}></Route>
           <Route path='/admin/product' element={<ProtectedRoute><AllProducts /></ProtectedRoute>}></Route> 
           <Route path='/admin/product/:slug' element={<ProtectedRoute><EditProduct /></ProtectedRoute>}></Route>
-          <Route path='/product/:slug' element={<ViewProduct />}></Route>           
+          <Route path='/product/:slug' element={<ViewProduct />}></Route>
+          <Route path='/category/:slug' element={<CategoryBasedOnId />}></Route>
+          <Route path='/sub-category/:slug' element={<SubCategoryBasedOnId />}></Route>            
       </Routes>
     </BrowserRouter>
   );
