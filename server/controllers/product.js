@@ -169,7 +169,12 @@ const list =  async (req,res) => {
 
  const productCount = async (req,res) => {
   let total = await Product.find({}).estimatedDocumentCount()
-  res.json(total);
+  console.log('product count',total)
+  const products = await Product.find({})
+  res.json({
+    total,
+    products
+  });
 }
 
 const productStar = async (req,res) => {
@@ -222,6 +227,23 @@ const relatedProduct = async (req,res) => {
   }
 }
 
+const searchFilter = async (req,res,query) => {
+  const products = await Product.find({$text: {$search: query}})
+  .populate('category', '_id name').populate('subs', '_id name')
+  res.json(products)
+}
+
+const searchQuery = async (req,res) => {
+  try {
+    const {query} = req.body
+    if(query){
+      await searchFilter(req,res,query)
+    }
+  } catch (error) {
+    
+  }
+}
+
 module.exports = {
   create,
   listAllProducts,
@@ -231,5 +253,6 @@ module.exports = {
   list,
   productCount,
   productStar,
-  relatedProduct
+  relatedProduct,
+  searchQuery
 };

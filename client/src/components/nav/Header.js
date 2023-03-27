@@ -12,6 +12,7 @@ import { loginUser, logoutUser } from '../../redux/authSlice';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import firebase from 'firebase/compat/app'
+import Search from '../Search';
 
   const { SubMenu, Item } = Menu;
   
@@ -71,7 +72,7 @@ const Header = () => {
       
    
     
-
+      <Search />
     
   </Menu>
   )

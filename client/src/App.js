@@ -27,7 +27,7 @@ import EditProduct from './pages/AdminRoutes/product/EditProduct';
 import ViewProduct from './pages/ViewProduct';
 import CategoryBasedOnId from './pages/category/CategoryBasedOnId';
 import SubCategoryBasedOnId from './pages/subcategory/SubCategoryBasedOnId';
-
+import Shop from './pages/Shop';
 
 
 function App() {
@@ -75,7 +75,8 @@ function App() {
           <Route path='/admin/product/:slug' element={<ProtectedRoute><EditProduct /></ProtectedRoute>}></Route>
           <Route path='/product/:slug' element={<ViewProduct />}></Route>
           <Route path='/category/:slug' element={<CategoryBasedOnId />}></Route>
-          <Route path='/sub-category/:slug' element={<SubCategoryBasedOnId />}></Route>            
+          <Route path='/sub-category/:slug' element={<SubCategoryBasedOnId />}></Route>
+          <Route path='/shop' element={<Shop />}></Route>            
       </Routes>
     </BrowserRouter>
   );
