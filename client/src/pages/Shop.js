@@ -1,12 +1,16 @@
+import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import AllProducts from '../components/AllProducts'
-import { getProductCounts } from '../utils/product'
+import { getProductCounts,fetchProductByFilter } from '../utils/product'
 
 
 const Shop = () => {
     const [count,setCount] = useState('')
  const [products, setProducts] = useState([])
  const [loading,setLoading] = useState(false)
+ const {search} = useSelector((state) => ({...state}))
+ const {text} = search
  useEffect(() => {
     loadAllProducts();
   }, []);
@@ -20,6 +24,25 @@ const Shop = () => {
       setLoading(false);
     });
   };
+
+//   useEffect(() => {
+//     console.log('new text',text)
+//     filterProduct(text)
+//   },[text])
+
+  useEffect(() => {
+    const delayed = setTimeout(() => {
+        filterProduct({ query: text });
+      }, 300);
+      return () => clearTimeout(delayed);
+  }, [text]);
+
+  const filterProduct = async (args) => {
+    const response = await axios.post(`${process.env.REACT_APP_URL}/search/filter`, args)
+    console.log('response next',response)
+    setProducts(response.data)
+  }
+    
 
   return (
     <div className="container-fluid">

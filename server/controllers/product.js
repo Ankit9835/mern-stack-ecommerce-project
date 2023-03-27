@@ -227,22 +227,25 @@ const relatedProduct = async (req,res) => {
   }
 }
 
-const searchFilter = async (req,res,query) => {
-  const products = await Product.find({$text: {$search: query}})
-  .populate('category', '_id name').populate('subs', '_id name')
-  res.json(products)
-}
+const handleQuery = async (req, res, query) => {
+  console.log('test query data',query)
+  const products = await Product.find({ 'title' : { '$regex' : query, '$options' : 'i' } })
+  .populate("category")
+  .populate("subs")
+  .exec();
+  console.log('product',products)
+  res.json(products);
+};
 
-const searchQuery = async (req,res) => {
-  try {
-    const {query} = req.body
-    if(query){
-      await searchFilter(req,res,query)
-    }
-  } catch (error) {
-    
+const searchQuery = async (req, res) => {
+  const { query } = req.body;
+  console.log('quert',req.body)
+  if (query) {
+    console.log("query", query);
+    await handleQuery(req, res, query.text);
   }
-}
+};
+
 
 module.exports = {
   create,
