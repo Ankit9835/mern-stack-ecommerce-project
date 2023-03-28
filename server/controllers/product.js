@@ -230,19 +230,63 @@ const relatedProduct = async (req,res) => {
 const handleQuery = async (req, res, query) => {
   console.log('test query data',query)
   const products = await Product.find({ 'title' : { '$regex' : query, '$options' : 'i' } })
-  .populate("category")
-  .populate("subs")
+  .populate("category", "_id name")
+  .populate("subs", "_id, name")
   .exec();
   console.log('product',products)
   res.json(products);
 };
 
+const filterPrice = async (req,res,price) => {
+  try {
+   
+    const products = await Product.find({price: {
+                        $gte:price[0],
+                        $lte:price[1]
+                      }
+                    }).populate('category', '_id name')
+                    .populate('subs', '_id, name')
+    
+  console.log('filter price',products)
+  const system =  await Product.find({}).populate('category', '_id name')
+  .populate('subs', '_id, name')
+  // if(products == []){
+  //    res.json(system)
+  // } else {
+    res.json(products);
+  
+  
+
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
+const filterCategory = async (req,res,category) => {
+  try {
+    const response = await Product.find({category}).populate('category', '_id name')
+    .populate('subs', '_id, name')
+    res.json(response)
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
 const searchQuery = async (req, res) => {
-  const { query } = req.body;
+  const { query, price, category } = req.body;
+  console.log('category',category)
+  console.log('price',price)
   console.log('quert',req.body)
   if (query) {
     console.log("query", query);
     await handleQuery(req, res, query.text);
+  }
+  if(price != undefined){
+    await filterPrice(req,res,price)
+  }
+
+  if(category){
+    await filterCategory(req,res,category)
   }
 };
 
