@@ -5,9 +5,11 @@ import { searchQuery } from "../redux/searchSlice";
 import AllProducts from '../components/AllProducts'
 import { getProductCounts,fetchProductByFilter } from '../utils/product'
 import { Menu, Slider, Checkbox } from "antd";
-import { DollarOutlined, DownSquareOutlined } from "@ant-design/icons";
+import { DollarOutlined, DownSquareOutlined,StarOutlined } from "@ant-design/icons";
 import { getAllCategory } from '../utils/category';
+import Star from '../components/ratings/Star';
 const { SubMenu, ItemGroup } = Menu;
+
  
 const Shop = () => {
 const [count,setCount] = useState('')
@@ -18,6 +20,7 @@ const [count,setCount] = useState('')
  const {search} = useSelector((state) => ({...state}))
  const [categories,setCategories] = useState([])
  const [categoryIds,setCategoryIds] = useState([])
+ const [star,setStar] = useState('')
  const {text} = search
  const dispatch = useDispatch()
 
@@ -112,7 +115,36 @@ const filterProduct = async (args) => {
       </div>
     ));
 
-  
+
+    const handleStarClick = (num) => {
+      dispatch({
+        type: "SEARCH_QUERY",
+        payload: { text: "" },
+      });
+      setPrice([0, 0]);
+      setCategoryIds([]);
+      setStar(num)
+      filterProduct({ stars: num });
+    }
+
+    const showStars = () => {
+      return (
+        <>
+            <div className="pr-4 pl-4 pb-2">
+            <Star starClick={handleStarClick} numberOfStars={5} />
+            {/* <Star starClick={handleStarClick} numberOfStars={4} />
+            <Star starClick={handleStarClick} numberOfStars={3} />
+            <Star starClick={handleStarClick} numberOfStars={2} />
+            <Star starClick={handleStarClick} numberOfStars={1} /> */}
+          </div>
+        </>
+      )
+      
+      
+    }
+      
+    
+      
     
 
   return (
@@ -122,7 +154,8 @@ const filterProduct = async (args) => {
           <h4>Search/Filter</h4>
           <hr />
 
-          <Menu defaultOpenKeys={["1", "2"]} mode="inline">
+          <Menu defaultOpenKeys={["1", "2", "3"]} mode="inline">
+            {/* price */}
             <SubMenu
               key="1"
               title={
@@ -138,11 +171,12 @@ const filterProduct = async (args) => {
                   range
                   value={price}
                   onChange={handleSlider}
-                  max="200000"
+                  max="4999"
                 />
               </div>
             </SubMenu>
 
+            {/* category */}
             <SubMenu
               key="2"
               title={
@@ -152,6 +186,18 @@ const filterProduct = async (args) => {
               }
             >
               <div style={{ maringTop: "-10px" }}>{showCategories()}</div>
+            </SubMenu>
+
+            {/* stars */}
+            <SubMenu
+              key="3"
+              title={
+                <span className="h6">
+                  <StarOutlined /> Rating
+                </span>
+              }
+            >
+              <div style={{ marginTop: "-10px" }}>{showStars()}</div>
             </SubMenu>
           </Menu>
         </div>
