@@ -28,6 +28,7 @@ import ViewProduct from './pages/ViewProduct';
 import CategoryBasedOnId from './pages/category/CategoryBasedOnId';
 import SubCategoryBasedOnId from './pages/subcategory/SubCategoryBasedOnId';
 import Shop from './pages/Shop';
+import Cart from './pages/Cart';
 
 
 function App() {
@@ -76,7 +77,8 @@ function App() {
           <Route path='/product/:slug' element={<ViewProduct />}></Route>
           <Route path='/category/:slug' element={<CategoryBasedOnId />}></Route>
           <Route path='/sub-category/:slug' element={<SubCategoryBasedOnId />}></Route>
-          <Route path='/shop' element={<Shop />}></Route>            
+          <Route path='/shop' element={<Shop />}></Route>
+          <Route path='/cart' element={<Cart />}></Route>               
       </Routes>
     </BrowserRouter>
   );

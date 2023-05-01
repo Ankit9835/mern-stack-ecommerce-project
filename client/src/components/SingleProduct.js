@@ -9,6 +9,9 @@ import ProductListItem from "./ProductListItem";
 import StarRating from "react-star-ratings";
 import RatingModal from "./modal/RatingModal";
 import { showAverage } from "../utils/raings";
+import _ from "lodash";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../redux/cartSlice";
 
 
 const { TabPane } = Tabs;
@@ -36,6 +39,29 @@ const SingleProduct = ({
   singleProduct
   
 }) => {
+  const dispatch = useDispatch()
+  const handleAddToCart = () => {
+    let cart = []
+    if(typeof window !== undefined){
+      let cart = []
+      if(localStorage.getItem('cart')){
+        cart = JSON.parse(localStorage.getItem('cart'))
+      }
+
+      cart.push({
+        ...singleProduct,
+        count:1
+      })
+      
+      let unique = _.uniqWith(cart, _.isEqual);
+
+      localStorage.setItem('cart', JSON.stringify(unique))
+      dispatch(addToCart({
+        cart:unique
+      }))
+      //setLabel('Added')
+    }
+  }
   return (
     <>
       <div className="col-md-7">
@@ -63,8 +89,10 @@ const SingleProduct = ({
         <Card
           actions={[
             <>
+             <a onClick={handleAddToCart}>
               <ShoppingCartOutlined className="text-success" /> <br />
               Add to Cart
+              </a>
             </>,
             <Link to="/">
               <HeartOutlined className="text-info" /> <br /> Add to Wishlist
