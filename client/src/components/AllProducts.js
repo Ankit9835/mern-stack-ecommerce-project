@@ -19,7 +19,7 @@ const AllProducts = ({title,images,description,slug,product}) => {
   const {label,setLabel} = useState('Add To Cart')
   const handleAddToCart = () => {
     let cart = []
-    if(typeof window !== undefined){
+    if(typeof window !== 'undefined'){
       let cart = []
       if(localStorage.getItem('cart')){
         cart = JSON.parse(localStorage.getItem('cart'))
@@ -33,9 +33,9 @@ const AllProducts = ({title,images,description,slug,product}) => {
       let unique = _.uniqWith(cart, _.isEqual);
 
       localStorage.setItem('cart', JSON.stringify(unique))
-      dispatch(addToCart({
-        cart: unique
-      }))
+      dispatch(addToCart(
+        unique
+      ))
       //setLabel('Added')
     }
   }

@@ -71,9 +71,9 @@ const Header = () => {
         </Link>
       </Item>
 
-      <Item key="cart" onClick={lodoutUser} >
+      {user && <Item key="cart" onClick={lodoutUser} >
        Logout
-      </Item>
+      </Item>}
 
     {!user && <Item key="register" icon={<UserAddOutlined />} className="float-right">
       <Link to='/register'> Register</Link>

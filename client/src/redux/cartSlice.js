@@ -1,13 +1,8 @@
 import {createSlice} from '@reduxjs/toolkit'
 
-let initialState = []
 
-if(typeof window !== undefined){
-    if(localStorage.getItem('cart')){
-        initialState = JSON.parse(localStorage.getItem('cart'))
-    } else {
-        initialState = []
-    }
+const initialState = {
+    box:  JSON.parse(localStorage.getItem('cart'))
 }
 
 export const cartSlice = createSlice({
@@ -15,7 +10,7 @@ export const cartSlice = createSlice({
     initialState,
     reducers:{
         addToCart: (state,action) =>{
-            state.cart = action.payload
+            state.box = action.payload
         }
     }
 })
