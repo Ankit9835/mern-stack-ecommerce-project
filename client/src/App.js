@@ -29,6 +29,7 @@ import CategoryBasedOnId from './pages/category/CategoryBasedOnId';
 import SubCategoryBasedOnId from './pages/subcategory/SubCategoryBasedOnId';
 import Shop from './pages/Shop';
 import Cart from './pages/Cart';
+import SideDrawer from './components/drawer/SideDrawer';
 
 
 function App() {
@@ -54,6 +55,7 @@ function App() {
   return ( 
     <BrowserRouter>
       <Header />
+      <SideDrawer />
       <ToastContainer />
       <Routes>
          <Route index element={

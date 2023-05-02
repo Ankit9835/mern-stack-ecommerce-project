@@ -3,12 +3,18 @@ import ModalImage from "react-modal-image";
 import laptop from '../images/laptop.png'
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../redux/cartSlice';
+import {
+    CheckCircleOutlined,
+    CloseCircleOutlined,
+    CloseOutlined,
+  } from "@ant-design/icons";
 
 
 const ProductCardInCheckout = ({p}) => {
     const dispatch = useDispatch()
     const colors = ["Black", "Brown", "Silver", "White", "Blue"];
     const handleColorChange = (e) => {
+        
         console.log('color', e.target.value)
         let cart = []
         if(localStorage.getItem('cart')){
@@ -28,6 +34,46 @@ const ProductCardInCheckout = ({p}) => {
         dispatch(addToCart(cart))
        
     }
+
+    const handleQuantityChange = (e) => {
+        console.log('quantity', e.target.value)
+        
+        let cart = []
+        if(typeof window !== 'undefined'){
+
+            if(localStorage.getItem('cart')){
+              cart = JSON.parse(localStorage.getItem('cart'))
+            }
+    
+            cart.map((product,i) => {
+                if(product._id === p._id){
+                    cart[i].count = parseInt(e.target.value)
+                }
+            })
+    
+            localStorage.setItem('cart', JSON.stringify(cart))
+            dispatch(addToCart(cart))
+        }
+    }
+
+    const handleRemove = (e) => {
+        let cart = []
+        if(typeof window !== 'undefined'){
+            if(localStorage.getItem('cart')){
+                cart = JSON.parse(localStorage.getItem('cart'))
+            }
+
+            cart.map((product, i) => {
+                if (product._id === p._id) {
+                  cart.splice(i, 1);
+                }
+              });
+
+            localStorage.setItem('cart',JSON.stringify(cart))
+            dispatch(addToCart(cart))
+        }
+    }
+
     return (
         <tbody>
           <tr>
@@ -57,9 +103,25 @@ const ProductCardInCheckout = ({p}) => {
                 })}
             </select>
             </td>
-            <td>{p.count}</td>
-            <td>Shipping Icon</td>
-            <td>Delete Icon</td>
+            <td className="text-center">
+                <input
+                    type="number"
+                    className="form-control"
+                    value={p.count}
+                    onChange={handleQuantityChange}
+                />
+             </td>
+            <td>{p.shipping == 'Yes' ? (
+            <CheckCircleOutlined className="text-success" />
+          ) : (
+            <CloseCircleOutlined className="text-danger" />
+          )}</td>
+            <td>
+            <CloseOutlined
+            onClick={handleRemove}
+            className="text-danger pointer"
+          />
+            </td>
           </tr>
         </tbody>
       );

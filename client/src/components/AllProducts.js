@@ -7,6 +7,8 @@ import { showAverage } from '../utils/raings';
 import _ from "lodash";
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../redux/cartSlice';
+import { sideDrawer } from '../redux/drawerSlice';
+
 
 
 
@@ -36,6 +38,8 @@ const AllProducts = ({title,images,description,slug,product}) => {
       dispatch(addToCart(
         unique
       ))
+
+      dispatch(sideDrawer(true))
       //setLabel('Added')
     }
   }
