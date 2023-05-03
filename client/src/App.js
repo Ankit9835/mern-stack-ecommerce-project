@@ -30,6 +30,7 @@ import SubCategoryBasedOnId from './pages/subcategory/SubCategoryBasedOnId';
 import Shop from './pages/Shop';
 import Cart from './pages/Cart';
 import SideDrawer from './components/drawer/SideDrawer';
+import Checkout from './pages/Checkout';
 
 
 function App() {
@@ -80,7 +81,8 @@ function App() {
           <Route path='/category/:slug' element={<CategoryBasedOnId />}></Route>
           <Route path='/sub-category/:slug' element={<SubCategoryBasedOnId />}></Route>
           <Route path='/shop' element={<Shop />}></Route>
-          <Route path='/cart' element={<Cart />}></Route>               
+          <Route path='/cart' element={<Cart />}></Route>
+          <Route path='/checkout' element={<Checkout />}></Route>               
       </Routes>
     </BrowserRouter>
   );

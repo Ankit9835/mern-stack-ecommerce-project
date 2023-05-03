@@ -9,6 +9,7 @@ const SideDrawer = ({ children }) => {
   const dispatch = useDispatch();
   const { drawer, cart } = useSelector((state) => ({ ...state }));
   console.log('drawer',drawer.drawer)
+  console.log('cart',cart)
   
   const imageStyle = {
     width: "100%",
@@ -16,7 +17,9 @@ const SideDrawer = ({ children }) => {
     objectFit: "cover",
   };
 
-  return <Drawer  onClose={() => {
+  return (
+    <>
+      {cart.box.length > 0 ? <Drawer  onClose={() => {
     dispatch(sideDrawer(false));
   }} open={drawer.drawer ? drawer.drawer : false}>
     {/* {JSON.stringify(cart)} */}
@@ -51,7 +54,10 @@ const SideDrawer = ({ children }) => {
           Go To Cart
         </button>
       </Link>
-  </Drawer>;
+  </Drawer> : ''}
+    </>
+  )
+   
 };
 
 export default SideDrawer;

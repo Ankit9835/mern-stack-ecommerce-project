@@ -1,19 +1,38 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import ProductCardInCheckout from '../components/ProductCardInCheckout'
-
+import { userCart } from '../utils/cart'
+import axios from 'axios'
 
 const Cart = () => {
  const dispatch = useDispatch()
+ const navigate = useNavigate()
  const {box} = useSelector((state) => state.cart) 
  const {user} = useSelector((state) => state.auth)
- console.log('user',user)
+ const token = user.token
+ console.log('user',user.token)
  console.log('car',box)
  const getTotal = () => {
     return box.reduce((currentValue,nextValue) => {
         return currentValue + nextValue.price * nextValue.count
     },0)
+ }
+//console.log('process',process.env.REACT_APP_API)
+ const proceedToCheckout = async () => {
+  try {
+    const response = await axios.post(`http://localhost:5000/api/add-cart`, {box}, {
+      headers:{
+        authToken:token 
+      }
+  })
+    if(response.data.ok){
+      navigate('/checkout')
+    }
+  } catch (error) {
+    console.log('cart save err', error)
+  }
+  
  }
 
  const showCartItems = () => (
@@ -65,7 +84,7 @@ const Cart = () => {
           Total: <b>${getTotal()}</b>
           <hr />
           {user.email ? (
-            <button className="btn btn-sm btn-primary mt-2">
+            <button className="btn btn-sm btn-primary mt-2" onClick={proceedToCheckout}>
               Proceed to Checkout
             </button>
           ) : (
