@@ -47,7 +47,10 @@ const read = async (req,res) => {
             data:coupon
         })
     } catch (error) {
-        console.log(error)
+        return res.json({
+            success:false,
+            message:'Something went wrong',
+        })
     }
 }
 
