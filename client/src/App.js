@@ -31,6 +31,7 @@ import Shop from './pages/Shop';
 import Cart from './pages/Cart';
 import SideDrawer from './components/drawer/SideDrawer';
 import Checkout from './pages/Checkout';
+import CreateCouponPage from './pages/AdminRoutes/coupon/CreateCouponPage';
 
 
 function App() {
@@ -77,6 +78,7 @@ function App() {
           <Route path='/admin/products' element={<ProtectedRoute><ProductCreate /></ProtectedRoute>}></Route>
           <Route path='/admin/product' element={<ProtectedRoute><AllProducts /></ProtectedRoute>}></Route> 
           <Route path='/admin/product/:slug' element={<ProtectedRoute><EditProduct /></ProtectedRoute>}></Route>
+          <Route path='/admin/coupon' element={<ProtectedRoute><CreateCouponPage /></ProtectedRoute>}></Route> 
           <Route path='/product/:slug' element={<ViewProduct />}></Route>
           <Route path='/category/:slug' element={<CategoryBasedOnId />}></Route>
           <Route path='/sub-category/:slug' element={<SubCategoryBasedOnId />}></Route>

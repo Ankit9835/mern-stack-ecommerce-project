@@ -2,11 +2,16 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addToCart } from '../redux/cartSlice'
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import { toast } from "react-toastify";
 
 
 const Checkout = () => {
 const [products,setProducts] = useState([])
 const [totals,setTotals] = useState('')
+const [address,setAddress] = useState('')
+const [addressSaved, setAddressSaved] = useState(false);
 const {user} = useSelector((state) => state.auth)
 const dispatch = useDispatch()
 const getData = async () => {
@@ -16,7 +21,7 @@ const getData = async () => {
         authToken:user.token
       }
     })
-    console.log('response',response)
+   // console.log('response',response)
     setProducts(response.data.products)
     setTotals(response.data.cartTotal)
   } catch (error) {
@@ -44,8 +49,21 @@ const emptyCart = async () => {
     console.log(error.message)
   }
 }
-const saveAddressToDb = () => {
-        //
+const saveAddressToDb = async () => {
+        try {
+          const response = await axios.post(`http://localhost:5000/api/save-address`, {address}, {
+                              headers:{
+                                authToken:user.token
+                              }
+                          })
+          console.log('save address',response)
+          if(response.data.ok){
+            setAddressSaved(true)
+            toast.success("Address saved");
+          }
+        } catch (error) {
+          console.log(error)
+        }
 };
   return (
     <div className="row">
@@ -53,7 +71,7 @@ const saveAddressToDb = () => {
       <h4>Delivery Address</h4>
       <br />
       <br />
-      textarea
+      <ReactQuill theme="snow" value={address} onChange={setAddress} />
       <button className="btn btn-primary mt-2" onClick={saveAddressToDb}>
         Save
       </button>
@@ -82,7 +100,7 @@ const saveAddressToDb = () => {
 
       <div className="row">
         <div className="col-md-6">
-          <button className="btn btn-primary">Place Order</button>
+          <button className="btn btn-primary" disabled={!addressSaved || products.length < 1}>Place Order</button>
         </div>
 
         <div className="col-md-6">
