@@ -1,6 +1,7 @@
  const User = require('../models/user')
  const Product = require('../models/product')
  const Cart = require('../models/cart')
+ const Coupon = require('../models/coupon')
 
  const createUser = async (req,res) => {
     try{
@@ -107,6 +108,30 @@ const saveAddress = async (req,res) => {
     }
 }
 
+const applyCoupon = async (req,res) => {
+    try {
+        const {coupon} = req.body
+        const couponExists = await Coupon.findOne({name:coupon})
+        if(!couponExists){
+            return res.json({
+                success:false,
+                message:'coupon does not exists'
+            })
+        }
+        const user = await User.findOne({email:req.user.email})
+        const {products,cartTotal} = await Cart.findOne({orderdBy:user._id}).populate('products.product', '_id title price')
+        console.log('cart total',cartTotal)
+        let totalAfterDiscount = (cartTotal - (cartTotal * couponExists.discount) / 100).toFixed(2)
+        res.json({
+            success:true,
+            message:'coupon applied successfully',
+            data:totalAfterDiscount
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 module.exports = {
-    createUser, currentUser, addToCart, getCart, emptyCart, saveAddress
+    createUser, currentUser, addToCart, getCart, emptyCart, saveAddress, applyCoupon
 }

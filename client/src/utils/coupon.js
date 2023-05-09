@@ -20,3 +20,11 @@ export const removeCoupon = async (couponId,authToken) => {
     })
 }
 
+export const applyCoupon = async (coupon,authToken) => {
+    return await axios.post(`${process.env.REACT_APP_URL}/apply-coupon`, {coupon}, {
+        headers:{
+            authToken
+        }
+    })
+}
+

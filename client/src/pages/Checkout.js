@@ -5,6 +5,9 @@ import { addToCart } from '../redux/cartSlice'
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { toast } from "react-toastify";
+import { applyCoupon } from '../utils/coupon';
+import { addCoupon } from '../redux/couponSlice'
+
 
 
 const Checkout = () => {
@@ -12,6 +15,8 @@ const [products,setProducts] = useState([])
 const [totals,setTotals] = useState('')
 const [address,setAddress] = useState('')
 const [addressSaved, setAddressSaved] = useState(false);
+const [coupon,setCoupon] = useState('')
+const [discount,setDiscount] = useState(0)
 const {user} = useSelector((state) => state.auth)
 const dispatch = useDispatch()
 const getData = async () => {
@@ -43,6 +48,8 @@ const emptyCart = async () => {
     console.log('empty cart',response)
     setProducts([])
     setTotals(0)
+    setDiscount(0)
+    dispatch(addCoupon(false))
     localStorage.removeItem('cart')
     dispatch(addToCart({}))
   } catch (error) {
@@ -65,6 +72,25 @@ const saveAddressToDb = async () => {
           console.log(error)
         }
 };
+
+const applyDiscountCoupon = async (e) => {
+  e.preventDefault()
+  console.log('coupon',coupon)
+  try {
+    const response = await applyCoupon(coupon,user.token)
+    console.log('apply coupon response',response)
+    if(response.data.success === true){
+      toast.success(response.data.message)
+      setDiscount(response.data.data)
+      dispatch(addCoupon(true))
+    }
+    if(response.data.success === false){
+      toast.error(response.data.message)
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
   return (
     <div className="row">
     <div className="col-md-6">
@@ -76,6 +102,18 @@ const saveAddressToDb = async () => {
         Save
       </button>
       <hr />
+      <input
+        onChange={(e) => {
+          setCoupon(e.target.value);
+          setDiscount(0);
+        }}
+        value={coupon}
+        type="text"
+        className="form-control"
+      />
+      <button onClick={applyDiscountCoupon} className="btn btn-primary mt-2">
+        Apply
+      </button>
       <h4>Got Coupon?</h4>
       <br />
       coupon input and apply button
@@ -97,6 +135,10 @@ const saveAddressToDb = async () => {
       </p>
       <hr />
       <p>Cart Total: {totals}</p>
+      
+      {discount > 0 && 
+        <p className='bg-success p-2'>Your Total Billing Amount Is Now :{discount}</p> 
+      }
 
       <div className="row">
         <div className="col-md-6">
